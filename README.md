@@ -1,4 +1,4 @@
-<p align="center" font-size:60px>Just-in-NEXT (nome em desenvolvimento)</p>
+#<p align="center" font-size:60px>Just-in-NEXT (nome em desenvolvimento)</p>
 Documentação Game
 Introdução
 O jogo se trata do robô “Unlocked” desenvolvido pela equipe MOREM estar atrasado para a competição no NEXT, com isso ele decide entrar na rodovia e fazer algo muito arriscado! Sair acelerando e ultrapassando carros de forma arriscada para que ele consiga chegar ao NEXT sem se atrasar! Gênero: Arcade e Cenário: Rodovia.
