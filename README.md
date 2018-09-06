@@ -22,11 +22,12 @@ O controle principal será feito pelas setas do teclado, onde o jogador terá qu
 - A velocidade dos carros será aumentada, o intervalo entre as pilhas também, e o tempo de sobrevivência necessário será maior (150 segundos).
 
 ###### Difícil
-– A velocidade dos carros novamente será aumentada, o intervalo entre as pilhas novamente também, e o tempo de sobrevivência necessário será ainda maior (180 segundos)
+
+- A velocidade dos carros novamente será aumentada, o intervalo entre as pilhas novamente também, e o tempo de sobrevivência necessário será ainda maior (180 segundos)
 
 ###### Infinito
 
-– Nessa dificuldade, não existe limite de tempo, a velocidade começará lenta e irá subir de forma continua, não existe vida nesse modo (logo não existe pilhas), caso o jogador seja atingido por um carro, game over. Existirá um sistema de pontuações com balões que aparecerão nos espaços onde não tem carros, a pontuação é feita pela quantidade de balões que são pegos em sequências, vide o exemplo:
+- Nessa dificuldade, não existe limite de tempo, a velocidade começará lenta e irá subir de forma continua, não existe vida nesse modo (logo não existe pilhas), caso o jogador seja atingido por um carro, game over. Existirá um sistema de pontuações com balões que aparecerão nos espaços onde não tem carros, a pontuação é feita pela quantidade de balões que são pegos em sequências, vide o exemplo:
 
 1 balão – 1 ponto.
 2 balão em sequência – 2 ponto.
