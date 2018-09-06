@@ -30,10 +30,15 @@ O controle principal será feito pelas setas do teclado, onde o jogador terá qu
 - Nessa dificuldade, não existe limite de tempo, a velocidade começará lenta e irá subir de forma continua, não existe vida nesse modo (logo não existe pilhas), caso o jogador seja atingido por um carro, game over. Existirá um sistema de pontuações com balões que aparecerão nos espaços onde não tem carros, a pontuação é feita pela quantidade de balões que são pegos em sequências, vide o exemplo:
 
 1 balão – 1 ponto.
+
 2 balão em sequência – 2 ponto.
+
 3 balão em sequência – 4 ponto.
+
 4 balão em sequência – 8 ponto.
+
 5 balão em sequência – 16 pontos.
+
 
 E continua nesse ritmo.
 No momento que o jogador deixar um balão passar, a sequência será reiniciada e ele terá que começar pelo primeiro balão novamente.
