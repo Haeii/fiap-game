@@ -39,8 +39,10 @@ O controle principal será feito pelas setas do teclado, onde o jogador terá qu
 
 5 balão em sequência – 16 pontos.
 
+6 balão em sequência - 32 pontos.
 
-E continua nesse ritmo.
+7 balão em sequência - 64 pontos. (MÁX)
+
 No momento que o jogador deixar um balão passar, a sequência será reiniciada e ele terá que começar pelo primeiro balão novamente.
 Quando o jogador morrer, aparecerá uma área para ele inserir o nome dele na tabela de pontuação, tendo a utilização de banco de dados.
 
