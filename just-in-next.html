@@ -9,12 +9,16 @@
 		<script>
 			var canvas = document.getElementById('tela');
 			var ctx = canvas.getContext('2d');
+            
+            var play = false;
 			//left arrow	37
 			//up arrow	38
 			//right arrow	39
 			//down arrow	40
 			var x = 180;
 			var y = 520;
+            var mX = 0;
+            var mY = 0;
 			
             var keyState = {};    
             window.addEventListener('keydown',function(e){
@@ -22,6 +26,11 @@
             window.addEventListener('keyup',function(e){
                 keyState[e.keyCode || e.which] = false; },true);
             
+            canvas.addEventListener('click', (e) => {
+                mX = event.clientX;
+                mY = event.clientY;
+                }
+            );
             //Vai manter guardado quais teclas estao sendo pressionadas e quais não estão
 
 
@@ -32,28 +41,46 @@
 			
 			
 			function gameloop() {
-				desenhaJogador(x,y);
-                if (keyState[37]) {
-                    x -= 5;
-                }    
-                if (keyState[39]) {
-                    x += 5;
+                if (play == true) {
+                    desenhaJogador(x,y);
+                    if (keyState[37]) { //Checa as teclas pressionadas
+                        x -= 5;  
+                    }    
+                    if (keyState[39]) {
+                        x += 5;
+                    }
+                    if (keyState[38]) {
+                        y -= 5;
+                    }
+                    if (keyState[40]) {
+                        y += 5;
+                    }
+                    requestAnimationFrame(gameloop);
                 }
-                if (keyState[38]) {
-                    y -= 5;
+                else {
+                    desenhaMenu();
+                    requestAnimationFrame(gameloop);
                 }
-                if (keyState[40]) {
-                    y += 5;
-                }
-				//Checa quais teclas pressionadas (true) e faz a movimentação de acordo
-				requestAnimationFrame(gameloop);
+                
+                                        
 			}
 			function desenhaJogador(pX, pY) {
-				ctx.clearRect(0, 0, 400, 800);
+				ctx.clearRect(0, 0, 400, 600);
 				ctx.fillStyle = '#00F';
 				ctx.fillRect(pX, pY, 40, 40);
 			
 			}
+            function desenhaMenu() {
+                ctx.clearRect(0, 0, 400, 600)
+                ctx.fillStyle = '#0F0';
+                ctx.fillRect(100, 250, 200, 100 )
+                ctx.fillStyle = '#000'
+                ctx.font= "60px Arial";
+                ctx.fillText("Jogar", 120, 320)
+                if (mX>=100 && mX<=300 && mY>=250 && mY<=350) play = true; //ao clicar no jogar, o play se torna true
+                
+                    
+            }
 		</script>
 	
 	</body>
