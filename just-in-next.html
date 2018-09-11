@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Just-in-NEXT</title>
+	</head>
+	<body>
+		<canvas id="tela" width="400" height="600" style="border: #000 solid 2px;"></canvas>
+		<script>
+			var canvas = document.getElementById('tela');
+			var ctx = canvas.getContext('2d');
+			//left arrow	37
+			//up arrow	38
+			//right arrow	39
+			//down arrow	40
+			var x = 180;
+			var y = 520;
+			
+            var keyState = {};    
+            window.addEventListener('keydown',function(e){
+                keyState[e.keyCode || e.which] = true; },true);    
+            window.addEventListener('keyup',function(e){
+                keyState[e.keyCode || e.which] = false; },true);
+            
+            //Vai manter guardado quais teclas estao sendo pressionadas e quais não estão
+
+
+            
+			
+			
+			requestAnimationFrame(gameloop);
+			
+			
+			function gameloop() {
+				desenhaJogador(x,y);
+                if (keyState[37]) {
+                    x -= 5;
+                }    
+                if (keyState[39]) {
+                    x += 5;
+                }
+                if (keyState[38]) {
+                    y -= 5;
+                }
+                if (keyState[40]) {
+                    y += 5;
+                }
+				//Checa quais teclas pressionadas (true) e faz a movimentação de acordo
+				requestAnimationFrame(gameloop);
+			}
+			function desenhaJogador(pX, pY) {
+				ctx.clearRect(0, 0, 400, 800);
+				ctx.fillStyle = '#00F';
+				ctx.fillRect(pX, pY, 40, 40);
+			
+			}
+		</script>
+	
+	</body>
+</html>
