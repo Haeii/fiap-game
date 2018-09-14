@@ -5,12 +5,12 @@
 		<title>Just-in-NEXT</title>
 	</head>
 	<body>
-		<canvas id="tela" width="400" height="600" style="border: #000 solid 2px;"></canvas>
+		<canvas id="tela" width="400" height="600" style="margin: 0 auto; border: #000 solid 2px;"></canvas>
 		<script>
 			var canvas = document.getElementById('tela');
 			var ctx = canvas.getContext('2d');
             
-            var play = false;
+            var play = 0;
 			//left arrow	37
 			//up arrow	38
 			//right arrow	39
@@ -19,6 +19,12 @@
 			var y = 520;
             var mX = 0;
             var mY = 0;
+			var dificuldade = 0;
+			var comecaTempo = false;
+			
+			var xFaixa = 130
+			var yFaixa = 560
+
 			
             var keyState = {};    
             window.addEventListener('keydown',function(e){
@@ -26,38 +32,65 @@
             window.addEventListener('keyup',function(e){
                 keyState[e.keyCode || e.which] = false; },true);
             
+            
+            //Vai manter guardado quais teclas estao sendo pressionadas e quais não estão
+
+
             canvas.addEventListener('click', (e) => {
                 mX = event.clientX;
                 mY = event.clientY;
                 }
             );
-            //Vai manter guardado quais teclas estao sendo pressionadas e quais não estão
-
-
-            
-			
+			var startTime = Date.now(); //instancia o timer
 			
 			requestAnimationFrame(gameloop);
 			
 			
+			
 			function gameloop() {
-                if (play == true) {
+				
+			
+                if (play == 2) {
+					desenhaCenario();
+					mX = 0;
+					mY = 0;
                     desenhaJogador(x,y);
-                    if (keyState[37]) { //Checa as teclas pressionadas
-                        x -= 5;  
+                    if (keyState[37] && x>0) { //Checa as teclas pressionadas
+                        x -= 10;  
                     }    
-                    if (keyState[39]) {
-                        x += 5;
+                    if (keyState[39] && x<360) {
+                        x += 10;
                     }
-                    if (keyState[38]) {
-                        y -= 5;
+                    if (keyState[38] && y>0) {
+                        y -= 10;
                     }
-                    if (keyState[40]) {
-                        y += 5;
+                    if (keyState[40] && y<560) {
+                        y += 10;
                     }
+					
+					if (dificuldade == 1) { 
+	
+						if (comecaTempo == true) { //começa programacao do timer
+							startTime = Date.now()+120000;
+							comecaTempo = false;
+						}
+						var tempoPercorrido = Date.now() - startTime;
+						if (tempoPercorrido >= 0) { // quando chegar no 0, o jogo retorna uma screen de resultado e depois retorna para o menu principal
+							play = 1;
+						}
+						var tempoPercorrido_segundo = Math.abs((Math.floor(tempoPercorrido/1000)));
+						mostraTempo(tempoPercorrido_segundo); // termina programacao do timer
+						
+
+					}
+					
                     requestAnimationFrame(gameloop);
                 }
-                else {
+                else if (play == 1) {
+					desenhaDificuldade();
+					requestAnimationFrame(gameloop);
+                }
+				else {
                     desenhaMenu();
                     requestAnimationFrame(gameloop);
                 }
@@ -65,22 +98,75 @@
                                         
 			}
 			function desenhaJogador(pX, pY) {
-				ctx.clearRect(0, 0, 400, 600);
+				
 				ctx.fillStyle = '#00F';
 				ctx.fillRect(pX, pY, 40, 40);
 			
 			}
             function desenhaMenu() {
-                ctx.clearRect(0, 0, 400, 600)
+				ctx.clearRect(0, 0, 400, 600);
+				ctx.beginPath();
                 ctx.fillStyle = '#0F0';
                 ctx.fillRect(100, 250, 200, 100 )
-                ctx.fillStyle = '#000'
+                ctx.fillStyle = '#000';
                 ctx.font= "60px Arial";
                 ctx.fillText("Jogar", 120, 320)
-                if (mX>=100 && mX<=300 && mY>=250 && mY<=350) play = true; //ao clicar no jogar, o play se torna true
-                
-                    
+                if (mX>=100 && mX<=300 && mY>=250 && mY<=350) play = 1; //ao clicar no jogar, o play se torna true      
             }
+			function desenhaDificuldade() {
+				ctx.clearRect(0, 0, 400, 600);
+				ctx.beginPath();
+				ctx.fillStyle = '#000';
+				ctx.font = "30px Arial";
+				ctx.fillText("Escolha a dificuldade:", 50, 60);
+				ctx.fillStyle = '#0F0';
+				ctx.fillRect(100, 100, 200, 70);
+				ctx.fillStyle = '#FF0';
+				ctx.fillRect(100, 200, 200, 70);
+				ctx.fillStyle = '#F00';
+				ctx.fillRect(100, 300, 200, 70);
+				ctx.fillStyle = '#8A2BE2';
+				ctx.fillRect(100, 400, 200, 70);
+				ctx.fillStyle = '#000';
+				ctx.font = "50px Arial";
+				ctx.fillText("Fácil", 145, 150);
+				ctx.fillText("Médio", 130, 250);
+				ctx.fillText("Difícil", 136, 350);
+				ctx.fillText("Infínito", 125, 450);
+				if (mX>=100 && mX<=300 && mY>=100 && mY<=170) {
+					comecaTempo = true;
+					dificuldade = 1;
+					play = 2;
+					
+				}
+			}
+			
+			function mostraTempo(segundo) {
+				ctx.font = "50px Arial";
+				ctx.fillStyle = "#000";
+				ctx.fillText(segundo +"s", 280, 50);
+			}
+			
+			function desenhaCenario() {
+				ctx.clearRect(0, 0, 400, 600);
+				ctx.beginPath();
+				ctx.fillStyle = "#838383";
+				ctx.fillRect(35, 0, 330, 600);
+				ctx.strokeStyle = "#48B21F";
+				ctx.moveTo(10,0);
+				ctx.lineWidth = 20;
+				ctx.lineTo(10, 600);
+				ctx.stroke();
+				ctx.moveTo(390, 0);
+				ctx.lineTo(390, 600);
+				ctx.stroke();
+				desenhaFaixa()
+
+			}
+			
+			function desenhaFaixa() {
+				
+			}
 		</script>
 	
 	</body>
