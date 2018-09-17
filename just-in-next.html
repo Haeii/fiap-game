@@ -7,6 +7,7 @@
 	<body>
 		<canvas id="tela" width="400" height="600" style="margin: 0 auto; border: #000 solid 2px;"></canvas>
 		<script>
+			//ULTIMO UPDATE 17/09/2018 as 16:41.
 			var canvas = document.getElementById('tela');
 			var ctx = canvas.getContext('2d');
             
@@ -24,6 +25,27 @@
 			
 			var xFaixa = 130
 			var yFaixa = 560
+			
+			var Obstaculo0 = new Image();
+			Obstaculo0.src = "sprites/carroAmarelo.png";
+			
+			var Obstaculo1 = new Image();
+			Obstaculo1.src = "sprites/carroAzul.png";
+			
+			var Obstaculo2 = new Image();
+			Obstaculo2.src = "sprites/carroRosa.png";
+			
+			var Obstaculo3 = new Image();
+			Obstaculo3.src = "sprites/carroVerde.png";
+			
+			var Obstaculo4 = new Image();
+			Obstaculo4.src = "sprites/carroVermelho.png";
+			
+			var ativaObstaculo = [false, false, false, false, false];
+			var ObstaculoX = [200, 200, 200, 200, 200];
+			var ObstaculoY = [0, 0, 0, 0, 0];
+			var ObsLarg = [ObstaculoX[0]+67, ObstaculoX[1]+67, ObstaculoX[2]+67, ObstaculoX[3]+67, ObstaculoX[4] + 67];
+			var ObsComp = [ObstaculoY[0] + 118, ObstaculoY[1] + 118, ObstaculoY[2] + 118, ObstaculoY[3] + 118, ObstaculoY[4] + 118];
 
 			
             var keyState = {};    
@@ -55,17 +77,17 @@
 					mX = 0;
 					mY = 0;
                     desenhaJogador(x,y);
-                    if (keyState[37] && x>0) { //Checa as teclas pressionadas
-                        x -= 10;  
+                    if (keyState[37] && x>40) { //Checa as teclas pressionadas
+                        x -= 7.5;  
                     }    
-                    if (keyState[39] && x<360) {
-                        x += 10;
+                    if (keyState[39] && x<320) {
+                        x += 7.5;
                     }
                     if (keyState[38] && y>0) {
-                        y -= 10;
+                        y -= 7.5;
                     }
                     if (keyState[40] && y<560) {
-                        y += 10;
+                        y += 7.5;
                     }
 					
 					if (dificuldade == 1) { 
@@ -73,6 +95,7 @@
 						if (comecaTempo == true) { //começa programacao do timer
 							startTime = Date.now()+120000;
 							comecaTempo = false;
+							
 						}
 						var tempoPercorrido = Date.now() - startTime;
 						if (tempoPercorrido >= 0) { // quando chegar no 0, o jogo retorna uma screen de resultado e depois retorna para o menu principal
@@ -81,6 +104,11 @@
 						var tempoPercorrido_segundo = Math.abs((Math.floor(tempoPercorrido/1000)));
 						mostraTempo(tempoPercorrido_segundo); // termina programacao do timer
 						
+						if (tempoPercorrido % 200 == 0 ) {
+							acionaObstaculo(Math.floor(Math.random() * 5));
+						}
+						desenhaObstaculo();
+						detectaColisao();
 
 					}
 					
@@ -144,7 +172,7 @@
 			function mostraTempo(segundo) {
 				ctx.font = "50px Arial";
 				ctx.fillStyle = "#000";
-				ctx.fillText(segundo +"s", 280, 50);
+				ctx.fillText(segundo +"s", 200, 50);
 			}
 			
 			function desenhaCenario() {
@@ -160,13 +188,145 @@
 				ctx.moveTo(390, 0);
 				ctx.lineTo(390, 600);
 				ctx.stroke();
-				desenhaFaixa()
 
 			}
 			
-			function desenhaFaixa() {
+			function acionaObstaculo(selec) {
+			
+				switch(selec) {
+					case 0:
+						if (ativaObstaculo[0] == false) {
+							ativaObstaculo[0] = true;
+							ObstaculoX[0] = Math.floor(Math.random() * 300);
+							if (ObstaculoX[0] < 30) ObstaculoX[0] = 120;
+							
+							ObstaculoY[0] = -120;
+							ObsLarg[0] = ObstaculoX[0] + 67;
+							ObsComp[0] = ObstaculoY[0] + 118;
+							break;
+						}
+						else {
+							break;
+						}
 				
+					case 1:
+						if (ativaObstaculo[1] == false) {
+							ativaObstaculo[1] = true;
+							ObstaculoX[1] = Math.floor(Math.random() * 300);
+							if (ObstaculoX[1] < 30) ObstaculoX[1] = 80;
+							
+							ObstaculoY[1] = -120;
+							ObsLarg[1] = ObstaculoX[1] + 67;
+							ObsComp[1] = ObstaculoY[1] + 118;
+							break;
+						}
+						else {
+							break;
+						}
+
+					case 2:
+						if (ativaObstaculo[2] == false) {
+							ativaObstaculo[2] = true;
+							ObstaculoX[2] = Math.floor(Math.random() * 300);
+							if (ObstaculoX[2]<30 ) ObstaculoX[2] = 50;
+							
+							ObstaculoY[2] = -120;
+							ObsLarg[2] = ObstaculoX[2] + 67;
+							ObsComp[2] = ObstaculoY[2] + 118;
+							break;
+						}
+						else {
+							break;
+						}
+				
+					case 3:
+						if (ativaObstaculo[3] == false) {
+							ativaObstaculo[3] = true;
+							ObstaculoX[3] = Math.floor(Math.random() * 300);
+							if (ObstaculoX[3]<30 ) ObstaculoX[3] = 200;
+							
+							ObstaculoY[3] = -120;
+							ObsLarg[3] = ObstaculoX[3] + 67;
+							ObsComp[3] = ObstaculoY[3] + 118;
+							break;
+						}
+						else {
+							break;
+						}
+					
+					case 4:
+						if (ativaObstaculo[4] == false) {
+							ativaObstaculo[4] = true;
+							ObstaculoX[4] = Math.floor(Math.random() * 300);
+							if (ObstaculoX[4]<30 ) ObstaculoX[4] = 250;
+							
+							ObstaculoY[4] = -120;
+							ObsLarg[4] = ObstaculoX[4] + 67;
+							ObsComp[4] = ObstaculoY[4] + 118; 
+							break;
+						}
+						else {
+							break;
+						}
+				}
 			}
+			
+			function desenhaObstaculo() {
+				if (ativaObstaculo[0] == true) {
+					ctx.drawImage(Obstaculo0, ObstaculoX[0], ObstaculoY[0]);
+					ObstaculoY[0] += 10;
+					ObsComp[0] = ObstaculoY[0] + 118;
+					if (ObstaculoY[0] >= 600) {
+						ctx.beginPath();
+						ativaObstaculo[0] = false;
+					}
+				}
+				if (ativaObstaculo[1] == true) {
+					ctx.drawImage(Obstaculo1, ObstaculoX[1], ObstaculoY[1]);
+					ObstaculoY[1] += 10;
+					ObsComp[1] = ObstaculoY[1] + 118;
+					if (ObstaculoY[1] >= 600) {
+						ctx.beginPath();
+						ativaObstaculo[1] = false;
+					}
+				}
+				if (ativaObstaculo[2] == true) {
+					ctx.drawImage(Obstaculo2, ObstaculoX[2], ObstaculoY[2]);
+					ObstaculoY[2] += 10;
+					ObsComp[2] = ObstaculoY[2] + 118;
+					if (ObstaculoY[2] >= 600) {
+						ctx.beginPath();
+						ativaObstaculo[2] = false;	
+					}
+				}
+				if (ativaObstaculo[3] == true) {
+					ctx.drawImage(Obstaculo3, ObstaculoX[3], ObstaculoY[3]);
+					ObstaculoY[3] += 10;
+					ObsComp[3] = ObstaculoY[3] + 118;
+					if (ObstaculoY[3] >= 600) {
+						ctx.beginPath();
+						ativaObstaculo[3] = false;	
+				
+					}
+				}
+				if (ativaObstaculo[4] == true) {
+					ctx.drawImage(Obstaculo4, ObstaculoX[4], ObstaculoY[4]);
+					ObstaculoY[4] += 10;
+					ObsComp[4] = ObstaculoY[4] + 118;
+					if (ObstaculoY[4] >= 600) {
+						ctx.beginPath();
+						ativaObstaculo[4] = false;	
+					}
+					
+				}
+			}
+			
+			function detectaColisao() {
+				if (x >= ObstaculoX[0] && x <= ObsLarg[0] && y>= ObstaculoY[0] && y<= ObsComp[0]) alert("Colisao");
+				//FAZER SISTEMA DE VIDA E DE COLISAO
+			
+			}
+			
 		</script>
 	
 	</body>
