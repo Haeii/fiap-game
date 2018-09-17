@@ -49,11 +49,11 @@ Quando o jogador morrer, aparecerá uma área para ele inserir o nome dele na ta
 ### Para fazer:
 
 - [x] Primeira versão da documentação.
-- [ ] Fazer engine inicial do loop de gameplay.
+- [x] Fazer engine inicial do loop de gameplay.
 - [ ] Fazer sistema de colisão, vida e balão.
 - [ ] Colocar cenário, sprites de jogador, obstáculo, pilha e balão.
 - [ ] Fazer um menu inicial do jogo.
-- [ ] Criar as 4 dificuldades para seleção.
+- [x] Criar as 4 dificuldades para seleção.
 - [ ] Usar banco de dados para manter pontuações na dificuldade "Infinito"
 - [ ] QA - Resolver quaisquer bugs
 
