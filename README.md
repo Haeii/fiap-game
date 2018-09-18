@@ -50,7 +50,7 @@ Quando o jogador morrer, aparecerá uma área para ele inserir o nome dele na ta
 
 - [x] Primeira versão da documentação.
 - [x] Fazer engine inicial do loop de gameplay.
-- [ ] Fazer sistema de colisão, vida e balão.
+- [x] Fazer sistema de colisão, vida e balão. -Sistema de colisao inicial feito, precisa de ajustes
 - [ ] Colocar cenário, sprites de jogador, obstáculo, pilha e balão.
 - [ ] Fazer um menu inicial do jogo.
 - [ ] Criar as 4 dificuldades para seleção.
