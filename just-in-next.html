@@ -23,8 +23,12 @@
 			var dificuldade = 0;
 			var comecaTempo = false;
 			
+			var veloc = 0;
+			
 			var xFaixa = 130
 			var yFaixa = 560
+			
+			
 			
 			var Obstaculo0 = new Image();
 			Obstaculo0.src = "sprites/carroAmarelo.png";
@@ -46,14 +50,44 @@
 			var ObstaculoY = [0, 0, 0, 0, 0];
 			var ObsLarg = [ObstaculoX[0]+67, ObstaculoX[1]+67, ObstaculoX[2]+67, ObstaculoX[3]+67, ObstaculoX[4] + 67];
 			var ObsComp = [ObstaculoY[0] + 118, ObstaculoY[1] + 118, ObstaculoY[2] + 118, ObstaculoY[3] + 118, ObstaculoY[4] + 118];
+			
+			var vida = 0;
+			
+			var Vida1 = new Image();
+			Vida1.src  = "sprites/vida1.v1.png";
+			
+			var Vida2 = new Image();
+			Vida2.src  = "sprites/vida2.v1.png";
 
+			var Vida3 = new Image();
+			Vida3.src  = "sprites/vida3.v1.png";
+
+			var Vida4 = new Image();
+			Vida4.src  = "sprites/vida4.v1.png";
+
+			var Vida5 = new Image();
+			Vida5.src  = "sprites/vidaCheia.v1.png";
+
+			var estaEmColisao = false;
+			
+			var coracao = new Image();
+			coracao.src = "sprites/coracao.png";
+			
+			var ativaCoracao = false;
+			
+			var coracaoColi = true;
+			
+			var coracaoX = 200;
+			var coracaoY = 0;
+			var coracaoLarg = coracaoX + 48;
+			var coracaoComp = coracaoY + 48;
 			
             var keyState = {};    
             window.addEventListener('keydown',function(e){
                 keyState[e.keyCode || e.which] = true; },true);    
             window.addEventListener('keyup',function(e){
                 keyState[e.keyCode || e.which] = false; },true);
-            
+				
             
             //Vai manter guardado quais teclas estao sendo pressionadas e quais não estão
 
@@ -91,10 +125,12 @@
                     }
 					
 					if (dificuldade == 1) { 
+						veloc = 5;
 	
 						if (comecaTempo == true) { //começa programacao do timer
-							startTime = Date.now()+120000;
+							startTime = Date.now()+50000;
 							comecaTempo = false;
+							vida = 3;
 							
 						}
 						var tempoPercorrido = Date.now() - startTime;
@@ -104,11 +140,20 @@
 						var tempoPercorrido_segundo = Math.abs((Math.floor(tempoPercorrido/1000)));
 						mostraTempo(tempoPercorrido_segundo); // termina programacao do timer
 						
-						if (tempoPercorrido % 200 == 0 ) {
+						if (tempoPercorrido % 250 == 0 ) {
 							acionaObstaculo(Math.floor(Math.random() * 5));
 						}
-						desenhaObstaculo();
+						
+						if (tempoPercorrido_segundo % 10 == 0 ) {
+							coracaoColi = true;
+							acionaCoracao();
+							
+						}
+						desenhaObstaculo(veloc);
+						desenhaVida();
 						detectaColisao();
+						desenhaCoracao();
+						
 
 					}
 					
@@ -271,10 +316,10 @@
 				}
 			}
 			
-			function desenhaObstaculo() {
+			function desenhaObstaculo(velocidade) {
 				if (ativaObstaculo[0] == true) {
 					ctx.drawImage(Obstaculo0, ObstaculoX[0], ObstaculoY[0]);
-					ObstaculoY[0] += 10;
+					ObstaculoY[0] += velocidade;
 					ObsComp[0] = ObstaculoY[0] + 118;
 					if (ObstaculoY[0] >= 600) {
 						ctx.beginPath();
@@ -283,7 +328,7 @@
 				}
 				if (ativaObstaculo[1] == true) {
 					ctx.drawImage(Obstaculo1, ObstaculoX[1], ObstaculoY[1]);
-					ObstaculoY[1] += 10;
+					ObstaculoY[1] += velocidade;
 					ObsComp[1] = ObstaculoY[1] + 118;
 					if (ObstaculoY[1] >= 600) {
 						ctx.beginPath();
@@ -292,7 +337,7 @@
 				}
 				if (ativaObstaculo[2] == true) {
 					ctx.drawImage(Obstaculo2, ObstaculoX[2], ObstaculoY[2]);
-					ObstaculoY[2] += 10;
+					ObstaculoY[2] += velocidade;
 					ObsComp[2] = ObstaculoY[2] + 118;
 					if (ObstaculoY[2] >= 600) {
 						ctx.beginPath();
@@ -301,7 +346,7 @@
 				}
 				if (ativaObstaculo[3] == true) {
 					ctx.drawImage(Obstaculo3, ObstaculoX[3], ObstaculoY[3]);
-					ObstaculoY[3] += 10;
+					ObstaculoY[3] += velocidade;
 					ObsComp[3] = ObstaculoY[3] + 118;
 					if (ObstaculoY[3] >= 600) {
 						ctx.beginPath();
@@ -311,7 +356,7 @@
 				}
 				if (ativaObstaculo[4] == true) {
 					ctx.drawImage(Obstaculo4, ObstaculoX[4], ObstaculoY[4]);
-					ObstaculoY[4] += 10;
+					ObstaculoY[4] += velocidade;
 					ObsComp[4] = ObstaculoY[4] + 118;
 					if (ObstaculoY[4] >= 600) {
 						ctx.beginPath();
@@ -321,10 +366,120 @@
 				}
 			}
 			
-			function detectaColisao() {
-				if (x >= ObstaculoX[0] && x <= ObsLarg[0] && y>= ObstaculoY[0] && y<= ObsComp[0]) alert("Colisao");
-				//FAZER SISTEMA DE VIDA E DE COLISAO
+			function desenhaVida() {
+				if (vida == 5) {
+					ctx.beginPath();
+					ctx.drawImage(Vida5, 30, 30)
+				}
+				if (vida == 4) {
+					ctx.beginPath();
+					ctx.drawImage(Vida4, 30, 30)
+				}
+				if (vida == 3) {
+					ctx.beginPath();
+					ctx.drawImage(Vida3, 30, 30)
+				}
+				if (vida == 2) {
+					ctx.beginPath();
+					ctx.drawImage(Vida2, 30, 30)
+				}
+				if (vida == 1) {
+					ctx.beginPath();
+					ctx.drawImage(Vida1, 30, 30)
+				}
+			}
 			
+			function detectaColisao() {
+				if (x >= ObstaculoX[0]-37 && x <= ObsLarg[0] && y>= ObsComp[0] - (veloc*2) && y<= ObsComp[0]) {
+					if (estaEmColisao == false) {
+						estaEmColisao = true;
+						Vida(-1);
+					}
+					else estaEmColisao = false;
+				}
+
+				if (x >= ObstaculoX[1]-37 && x <= ObsLarg[1] && y>= ObsComp[1] - (veloc*2) && y<= ObsComp[1]) {
+					if (estaEmColisao == false) {
+						estaEmColisao = true;
+						Vida(-1);
+					}
+					else estaEmColisao = false;
+				}
+				if (x >= ObstaculoX[2]-37 && x <= ObsLarg[2] && y>= ObsComp[2] - (veloc*2) && y<= ObsComp[2]) {
+					if (estaEmColisao == false) {
+						estaEmColisao = true;
+						Vida(-1);
+					}
+					else estaEmColisao = false;
+				}
+				if (x >= ObstaculoX[3]-37 && x <= ObsLarg[3] && y>= ObsComp[3] - (veloc*2) && y<= ObsComp[3]) {
+					if (estaEmColisao == false) {
+						estaEmColisao = true;
+						Vida(-1);
+					}
+					else estaEmColisao = false;
+				}
+				if (x >= ObstaculoX[4]-37 && x <= ObsLarg[4] && y>= ObsComp[4] - (veloc*2) && y<= ObsComp[4]) {
+					if (estaEmColisao == false) {
+						estaEmColisao = true;
+						Vida(-1);
+					}
+					else estaEmColisao = false;
+				}
+				if (x>=coracaoX-37 && x<=coracaoLarg && y>= coracaoComp - 5 && y<= coracaoComp) {
+					if (estaEmColisao == false && coracaoColi == true) {
+						estaEmColisao = true;
+						coracaoColi = false;
+						Vida(1);
+					}
+					else estaEmColisao = false;
+				}
+			
+			}
+			
+			function Vida(x) {
+				if (vida == 5) {
+				
+				}
+				
+				else vida = x + vida;
+			}
+			
+			function acionaCoracao() {
+				if (ativaCoracao == false) {
+					ativaCoracao = true;
+					coracaoX = Math.floor(Math.random() * 300);
+					if (coracaoX < 30) coracaoX = 120;
+					coracaoY = -48;
+					coracaoLarg = coracaoX + 48;
+					coracaoComp = coracaoY + 48;
+				}
+
+			}
+			
+			function desenhaCoracao() {
+				if (estaEmColisao == true) {
+					
+					ativaCoracao = false;
+					return;
+				}
+				
+				if (ativaCoracao == true) {
+					ctx.drawImage(coracao, coracaoX, coracaoY);
+					coracaoY += 5;
+					coracaoComp = coracaoY + 48;
+					
+					if (coracaoY >= 600) {
+						ctx.beginPath();
+						ativaCoracao = false;
+					}
+					else {
+					
+					}
+				}
+				
+				else {
+				}
 			}
 			
 		</script>
