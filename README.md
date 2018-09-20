@@ -54,6 +54,6 @@ Quando o jogador morrer, aparecerá uma área para ele inserir o nome dele na ta
 - [x] Colocar cenário, sprites de jogador, obstáculo, pilha e balão. -Falta sprite do jogador e do balão
 - [ ] Fazer um menu inicial do jogo.
 - [ ] Criar as 4 dificuldades para seleção.
-- [ ] ~~ Usar banco de dados para manter pontuações na dificuldade "Infinito" ~~ Pontuação será local
+- [ ] ~~Usar banco de dados para manter pontuações na dificuldade "Infinito"~~ Pontuação será local
 - [ ] QA - Resolver quaisquer bugs
 
