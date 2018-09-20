@@ -44,16 +44,16 @@ O controle principal será feito pelas setas do teclado, onde o jogador terá qu
 7 balão em sequência - 64 pontos. (MÁX)
 
 No momento que o jogador deixar um balão passar, a sequência será reiniciada e ele terá que começar pelo primeiro balão novamente.
-Quando o jogador morrer, aparecerá uma área para ele inserir o nome dele na tabela de pontuação, tendo a utilização de banco de dados.
+Quando o jogador morrer, aparecerá uma área para ele inserir o nome dele na tabela de pontuação.
 
 ### Para fazer:
 
 - [x] Primeira versão da documentação.
 - [x] Fazer engine inicial do loop de gameplay.
-- [x] Fazer sistema de colisão, vida e balão. -Sistema de colisao inicial feito, precisa de ajustes
-- [ ] Colocar cenário, sprites de jogador, obstáculo, pilha e balão.
+- [x] Fazer sistema de colisão, vida e balão. -Falta fazer sistema de balão para a dificuldade "infínito"
+- [x] Colocar cenário, sprites de jogador, obstáculo, pilha e balão. -Falta sprite do jogador e do balão
 - [ ] Fazer um menu inicial do jogo.
 - [ ] Criar as 4 dificuldades para seleção.
-- [ ] Usar banco de dados para manter pontuações na dificuldade "Infinito"
+- [ ] ~~ Usar banco de dados para manter pontuações na dificuldade "Infinito" ~~ Pontuação será local
 - [ ] QA - Resolver quaisquer bugs
 
