@@ -5,9 +5,9 @@
 		<title>Just-in-NEXT</title>
 	</head>
 	<body>
-		<canvas id="tela" width="400" height="600" style="margin: 0 auto; border: #000 solid 2px;"></canvas>
+		<canvas id="tela" width="400" height="600" style="display: block; margin: 0 auto; border: #000 solid 2px;"></canvas>
 		<script>
-			//ULTIMO UPDATE 17/09/2018 as 16:41.
+			//ULTIMO UPDATE 20/09/2018 as 15:02.
 			var canvas = document.getElementById('tela');
 			var ctx = canvas.getContext('2d');
             
@@ -68,35 +68,39 @@
 			var Vida5 = new Image();
 			Vida5.src  = "sprites/vidaCheia.v1.png";
 
-			var estaEmColisao = false;
+			var estaEmColisao = [false, false, false, false, false, false];
 			
 			var coracao = new Image();
 			coracao.src = "sprites/coracao.png";
 			
 			var ativaCoracao = false;
 			
-			var coracaoColi = true;
+			var coracaoColi = false;
 			
 			var coracaoX = 200;
 			var coracaoY = 0;
 			var coracaoLarg = coracaoX + 48;
 			var coracaoComp = coracaoY + 48;
 			
-            var keyState = {};    
+			
+            var keyState = {};    //Vai manter guardado quais teclas estao sendo pressionadas e quais não estão
             window.addEventListener('keydown',function(e){
                 keyState[e.keyCode || e.which] = true; },true);    
             window.addEventListener('keyup',function(e){
                 keyState[e.keyCode || e.which] = false; },true);
-				
+            var frameCount = 0;
             
-            //Vai manter guardado quais teclas estao sendo pressionadas e quais não estão
 
 
             canvas.addEventListener('click', (e) => {
-                mX = event.clientX;
-                mY = event.clientY;
-                }
+				var rect = canvas.getBoundingClientRect();
+				
+                mX = (event.clientX - rect.left)/(rect.right - rect.left)*canvas.width;
+                mY = (event.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height;
+            }
             );
+			
+		
 			var startTime = Date.now(); //instancia o timer
 			
 			requestAnimationFrame(gameloop);
@@ -128,27 +132,28 @@
 						veloc = 5;
 	
 						if (comecaTempo == true) { //começa programacao do timer
-							startTime = Date.now()+50000;
+							startTime = performance.now()+ 50000;
 							comecaTempo = false;
 							vida = 3;
 							
 						}
-						var tempoPercorrido = Date.now() - startTime;
+						var tempoPercorrido = performance.now() - startTime;
 						if (tempoPercorrido >= 0) { // quando chegar no 0, o jogo retorna uma screen de resultado e depois retorna para o menu principal
-							play = 1;
+							play = 3;
 						}
 						var tempoPercorrido_segundo = Math.abs((Math.floor(tempoPercorrido/1000)));
 						mostraTempo(tempoPercorrido_segundo); // termina programacao do timer
-						
-						if (tempoPercorrido % 250 == 0 ) {
-							acionaObstaculo(Math.floor(Math.random() * 5));
-						}
+						frameCount += 1;
+							if (frameCount % 60 == 0) {
+								acionaObstaculo(Math.floor(Math.random() * 5));
+							}
 						
 						if (tempoPercorrido_segundo % 10 == 0 ) {
 							coracaoColi = true;
 							acionaCoracao();
 							
 						}
+						
 						desenhaObstaculo(veloc);
 						desenhaVida();
 						detectaColisao();
@@ -159,6 +164,10 @@
 					
                     requestAnimationFrame(gameloop);
                 }
+				else if (play == 3) {
+					desenhaSobreviveu();
+					requestAnimationFrame(gameloop);
+				}
                 else if (play == 1) {
 					desenhaDificuldade();
 					requestAnimationFrame(gameloop);
@@ -212,6 +221,49 @@
 					play = 2;
 					
 				}
+			}
+			function desenhaSobreviveu() {
+				ctx.clearRect(0, 0, 400, 600);
+				ctx.beginPath();
+				ctx.fillStyle = "#838383";
+				ctx.fillRect(35, 0, 330, 600);
+				ctx.strokeStyle = "#48B21F";
+				ctx.moveTo(10,0);
+				ctx.lineWidth = 20;
+				ctx.lineTo(10, 600);
+				ctx.stroke();
+				ctx.moveTo(390, 0);
+				ctx.lineTo(390, 600);
+				ctx.stroke();
+				ctx.globalAlpha = 0.5;
+				ctx.fillStyle = "#000";
+				ctx.fillRect(0, 0, 400, 600);
+				ctx.globalAlpha = 1.0
+				ctx.font = "80px Arial";
+				ctx.lineWidth = 3;
+				ctx.strokeStyle = "#000";
+				ctx.strokeText("Parabéns!", 18, 150)
+				ctx.fillStyle = "#FFF";
+				ctx.fillText("Parabéns!", 18, 150)
+				ctx.font = "38px Arial";
+				ctx.lineWidth = 3;
+				ctx.strokeStyle = "#000";
+				ctx.strokeText("você alcançou o NEXT", 6, 250)
+				ctx.fillStyle = "#FFF";
+				ctx.fillText("você alcançou o NEXT", 6, 250)
+				ctx.strokeText("a tempo!", 120, 300);
+				ctx.fillText("a tempo!", 120, 300);
+				
+				ctx.fillStyle = "#00F";
+				ctx.fillRect(125, 400, 145, 80);
+				ctx.fillStyle = "#FF8000";
+				ctx.fillText("MENU", 140, 450);
+				if (mX>= 125 && mX<=270 && mY>=400 &&mY<=480) {
+					play = 0;
+				}
+				
+				
+				
 			}
 			
 			function mostraTempo(segundo) {
@@ -390,51 +442,59 @@
 			}
 			
 			function detectaColisao() {
-				if (x >= ObstaculoX[0]-37 && x <= ObsLarg[0] && y>= ObsComp[0] - (veloc*2) && y<= ObsComp[0]) {
-					if (estaEmColisao == false) {
-						estaEmColisao = true;
-						Vida(-1);
+					if (ObstaculoY[0] >= 600) {
+						estaEmColisao[0] = false;
 					}
-					else estaEmColisao = false;
+					if (ObstaculoY[1] >= 600) {
+						estaEmColisao[1] = false;
+					}
+					if (ObstaculoY[2] >= 600) {
+						estaEmColisao[2] = false;
+					}
+					if (ObstaculoY[3] >= 600) {
+						estaEmColisao[3] = false;
+					}
+					if (ObstaculoY[4] >= 600) {
+						estaEmColisao[4] = false;
+					}
+				if (x >= ObstaculoX[0]-37 && x <= ObsLarg[0] && y>= ObstaculoY[0] && y<= ObsComp[0]) {
+					if (estaEmColisao[0] == false) {
+						estaEmColisao[0] = true;
+						Vida(-1);
+					}	
 				}
 
-				if (x >= ObstaculoX[1]-37 && x <= ObsLarg[1] && y>= ObsComp[1] - (veloc*2) && y<= ObsComp[1]) {
-					if (estaEmColisao == false) {
-						estaEmColisao = true;
+				if (x >= ObstaculoX[1]-37 && x <= ObsLarg[1] && y>= ObstaculoY[1] && y<= ObsComp[1]) {
+					if (estaEmColisao[1] == false) {
+						estaEmColisao[1] = true;
+						Vida(-1);
+					}	
+				}
+				if (x >= ObstaculoX[2]-37 && x <= ObsLarg[2] && y>= ObstaculoY[2] && y<= ObsComp[2]) {
+					if (estaEmColisao[2] == false) {
+						estaEmColisao[2] = true;
 						Vida(-1);
 					}
-					else estaEmColisao = false;
 				}
-				if (x >= ObstaculoX[2]-37 && x <= ObsLarg[2] && y>= ObsComp[2] - (veloc*2) && y<= ObsComp[2]) {
-					if (estaEmColisao == false) {
-						estaEmColisao = true;
+				if (x >= ObstaculoX[3]-37 && x <= ObsLarg[3] && y>= ObstaculoY[3] && y<= ObsComp[3]) {
+					if (estaEmColisao[3] == false) {
+						estaEmColisao[3] = true;
 						Vida(-1);
 					}
-					else estaEmColisao = false;
 				}
-				if (x >= ObstaculoX[3]-37 && x <= ObsLarg[3] && y>= ObsComp[3] - (veloc*2) && y<= ObsComp[3]) {
-					if (estaEmColisao == false) {
-						estaEmColisao = true;
+				if (x >= ObstaculoX[4]-37 && x <= ObsLarg[4] && y>= ObstaculoY[4] && y<= ObsComp[4]) {
+					if (estaEmColisao[4] == false) {
+						estaEmColisao[4] = true;
 						Vida(-1);
 					}
-					else estaEmColisao = false;
 				}
-				if (x >= ObstaculoX[4]-37 && x <= ObsLarg[4] && y>= ObsComp[4] - (veloc*2) && y<= ObsComp[4]) {
-					if (estaEmColisao == false) {
-						estaEmColisao = true;
-						Vida(-1);
-					}
-					else estaEmColisao = false;
-				}
-				if (x>=coracaoX-37 && x<=coracaoLarg && y>= coracaoComp - 5 && y<= coracaoComp) {
-					if (estaEmColisao == false && coracaoColi == true) {
-						estaEmColisao = true;
+				if (x>=coracaoX-37 && x<=coracaoLarg && y>= coracaoY&& y<= coracaoComp) {
+					if (estaEmColisao[5] == false && coracaoColi == true) {
+						estaEmColisao[5] = true;
 						coracaoColi = false;
 						Vida(1);
 					}
-					else estaEmColisao = false;
 				}
-			
 			}
 			
 			function Vida(x) {
@@ -446,39 +506,37 @@
 			}
 			
 			function acionaCoracao() {
-				if (ativaCoracao == false) {
+					estaEmColisao[5] = false;
+					coracaoColi = true;
 					ativaCoracao = true;
 					coracaoX = Math.floor(Math.random() * 300);
 					if (coracaoX < 30) coracaoX = 120;
 					coracaoY = -48;
 					coracaoLarg = coracaoX + 48;
 					coracaoComp = coracaoY + 48;
-				}
 
 			}
 			
 			function desenhaCoracao() {
-				if (estaEmColisao == true) {
-					
+				if (estaEmColisao[5]) {
 					ativaCoracao = false;
 					return;
 				}
 				
 				if (ativaCoracao == true) {
-					ctx.drawImage(coracao, coracaoX, coracaoY);
-					coracaoY += 5;
-					coracaoComp = coracaoY + 48;
-					
-					if (coracaoY >= 600) {
-						ctx.beginPath();
-						ativaCoracao = false;
-					}
-					else {
-					
-					}
+						ctx.drawImage(coracao, coracaoX, coracaoY);
+						coracaoY += 5;
+						coracaoComp = coracaoY + 48;
+						
+						if (coracaoY >= 600) {
+							ctx.beginPath();
+							ativaCoracao = false;
+						}
+						else {
+						}
 				}
-				
 				else {
+
 				}
 			}
 			
